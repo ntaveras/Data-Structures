@@ -1,1 +1,106 @@
-
+public class doublyLinkedList {
+    private Node head = null;
+    private Node tail = null;
+    private Integer size = 0;
+    
+    public void insertHead(Object data){
+        Node newNode = new Node(data);
+        if(this.isEmpty()){ 
+            head = newNode;
+            tail = head;
+        } else{
+            head.prev = newNode;
+            head = newNode;
+        }
+        this.size++;
+    }
+    public void insertTail(Object data){
+        Node newNode = new Node(data);
+        if(this.isEmpty()){
+            tail = newNode;
+            head = tail;
+        }
+        tail.next = newNode;
+        newNode.prev = tail;
+        tail = newNode;
+        this.size++;
+    }
+    
+    public void InsertAt(Integer index, Object data){
+        if( !isValidIndex(index) ){
+            System.debug(logginglevel.ERROR,
+                         'Invalid Index provided on DLL.InsertAt() method. Index provided was '+ index +' but the size is ' + this.size());
+        } else if(index == 0){
+            insertHead(data);
+        } else if(index == this.size - 1){
+            insertTail(data);
+        } else{
+            Node targetNode = Traverse(index);
+            Node newNode = new Node(data);
+            newNode.next = targetNode;
+            newNode.prev = targetNode.prev;
+            targetNode.prev.next = newNode;
+            targetNode.prev = newNode;
+            this.size++;
+        }
+    }
+    
+    public Node deleteHead(){
+        Node deletedNode = this.head;
+        if(this.size() == 1){
+            head = null;
+            tail = null;
+        }
+        head = head.next;
+        return deletedNode;
+    }
+    
+    public Node deleteTail(){
+        Node deletedNode = tail;
+        tail.prev.next = null;
+        tail = tail.prev;
+        return deletedNode;
+    }
+    
+    Public Node searchFor(Object data){
+        Node currentNode = head;
+        while(currentNode.next != null || currentNode.data != data){
+            currentNode = currentNode.next;
+        }
+        if(currentNode.data != data) return new Node(null);
+        return currentNode;
+    }
+    
+    public Node Traverse(Integer index){
+        Node currentNode = head;
+        while(currentNode.next != null && index > 0){
+            currentNode = currentNode.next;
+            index--;
+        }
+        return currentNode;
+    }
+        //ListNodes
+    Public Integer size(){
+        return this.size;
+    }
+    
+    Public Boolean isEmpty(){
+        return this.size() == 0;
+    }
+    
+    Private Boolean isValidIndex(Integer index){
+        Integer currentSize = this.size();
+        return (index > 0 || index < currentSize);
+    }
+    
+    public class Node{
+        
+        public Object data = null;
+        public Node prev = null;
+        public Node next = null;
+        
+        public Node(Object obj){
+            data = obj;
+        }
+    }
+}
